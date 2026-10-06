@@ -1,0 +1,9 @@
+{
+  "adapter": "outputs/task1_dpo/beta_0.3",
+  "preference_accuracy": 0.6241379310344828,
+  "mean_margin": 0.1308606416500848,
+  "mean_kl": -0.00021340529903075852,
+  "mean_reward": 1.1232730611165365,
+  "mean_length": 154.36,
+  "std_length": 104.54359728521558
+}
