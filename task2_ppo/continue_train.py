@@ -221,7 +221,7 @@ def run_ppo(config_path: str, output: str | None = None, updates: int | None = N
         with open(metrics_file, "a") as f:
             f.write(json.dumps(metrics) + "\n")
             
-        if (update + 1) % 10 == 0:
+        if (update + 1) % 2 == 0:
             policy.save_pretrained(str(out) + f"_step_{update+1}")
             
     policy.save_pretrained(str(out))

@@ -167,8 +167,8 @@ def run_training(config_path: str, run_name: str, dataset_path: str | None = Non
                 with open(metrics_file, "a") as f:
                     f.write(json.dumps(m_dict) + "\n")
                     
-                # Save intermediate checkpoint
-                if global_step % 50 == 0:
+                # Save intermediate checkpoint more frequently for Spot instances
+                if global_step % 10 == 0:
                     model.save_pretrained(str(output) + f"_step_{global_step}")
                     
     # Save final model adapter weights
