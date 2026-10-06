@@ -138,8 +138,8 @@ def main():
             results["kl_divergences"].append(kl.item())
             
         # Calculate Reward
-        rm_tok = bundle.get("reward_tokenizer", tokenizer) # reward might use base tokenizer
-        rewards = score_reward_pairs(reward_model, rm_tok, batch_prompts, gen_out["responses"])
+        rm_model, rm_tok = bundle["reward"]
+        rewards = score_reward_pairs(rm_model, rm_tok, batch_prompts, gen_out["responses"])
         results["reward_scores"].extend(rewards.cpu().tolist())
         
         # Calculate Lengths
