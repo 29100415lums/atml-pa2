@@ -66,8 +66,14 @@ def main():
         for row in batch_rows:
             prompt = prompt_messages_from_preference(row)
             yc, yr = preference_responses(row)
-            chosen.append(encode_prompt_response(tokenizer, prompt, yc, max_len))
-            rejected.append(encode_prompt_response(tokenizer, prompt, yr, max_len))
+            try:
+                chosen.append(encode_prompt_response(tokenizer, prompt, yc, max_len))
+                rejected.append(encode_prompt_response(tokenizer, prompt, yr, max_len))
+            except ValueError:
+                continue
+                
+        if not chosen:
+            continue
             
         c_batch = pad_batch(tokenizer, chosen)
         r_batch = pad_batch(tokenizer, rejected)
