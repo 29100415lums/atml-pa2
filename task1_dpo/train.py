@@ -27,8 +27,15 @@ def make_collate(tokenizer, max_length):
         for row in rows:
             prompt = prompt_messages_from_preference(row)
             yc, yr = preference_responses(row)
-            chosen.append(encode_prompt_response(tokenizer, prompt, yc, max_length))
-            rejected.append(encode_prompt_response(tokenizer, prompt, yr, max_length))
+            try:
+                c = encode_prompt_response(tokenizer, prompt, yc, max_length)
+                r = encode_prompt_response(tokenizer, prompt, yr, max_length)
+                chosen.append(c)
+                rejected.append(r)
+            except ValueError:
+                continue
+        if not chosen:
+            return None, None
         return pad_batch(tokenizer, chosen), pad_batch(tokenizer, rejected)
     return collate
 
@@ -110,6 +117,9 @@ def run_training(config_path: str, run_name: str, dataset_path: str | None = Non
         progress = tqdm(loader, desc=f"Epoch {epoch+1}/{epochs}")
         
         for step, (chosen_batch, rejected_batch) in enumerate(progress):
+            if chosen_batch is None:
+                continue
+                
             # Move data to GPU if available
             if torch.cuda.is_available():
                 chosen_batch = {k: v.cuda() for k, v in chosen_batch.items()}
