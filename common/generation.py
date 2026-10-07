@@ -43,19 +43,28 @@ def batch_generate(
 
     was_training = model.training
     model.eval()
+    
+    # HF generate() with use_cache=True conflicts with gradient checkpointing
+    if hasattr(model, "gradient_checkpointing_disable"):
+        model.gradient_checkpointing_disable()
+        
     kwargs = {
         "max_new_tokens": max_new_tokens,
         "do_sample": do_sample,
         "pad_token_id": tokenizer.pad_token_id,
         "eos_token_id": tokenizer.eos_token_id,
+        "use_cache": True,
     }
     if do_sample:
         kwargs.update({"temperature": temperature, "top_p": top_p})
 
     with torch.inference_mode():
         seq = model.generate(**enc, **kwargs)
+        
     if was_training:
         model.train()
+        if hasattr(model, "gradient_checkpointing_enable"):
+            model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
 
     prompt_width = enc["input_ids"].shape[1]
     response_ids = seq[:, prompt_width:]
