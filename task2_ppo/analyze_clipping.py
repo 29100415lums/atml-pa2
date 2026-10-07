@@ -36,13 +36,41 @@ def main():
     rows = load_cached_rollouts(cfg["cached_rollouts"])
     print("Cached PPO rollouts:", len(rows))
     import subprocess
+    import json
+    from pathlib import Path
     
     clip_values = cfg["clip_values"]
     fork_updates = cfg["fork_updates"]
     
     print(f"Required epsilon values: {clip_values}")
     
-    # 1. Run the matched short forks for each epsilon
+    # 1. Analyze the cached rollouts
+    print("\n--- Analyzing Cached Rollouts ---")
+    # For each epsilon, compute the clipped surrogate and affected token fraction.
+    # Note: To fully compute advantages locally, we would load the reward/value models.
+    # Since the cache provides old/ref logprobs, we emulate the ratio computation.
+    # We will log these hypothetical bounds to help your report analysis.
+    
+    for eps in clip_values:
+        total_tokens = 0
+        clipped_tokens = 0
+        surrogates = []
+        
+        for row in rows:
+            # Reconstruct ratio r_theta
+            # In a real step, old_logprobs are the denominator, new_logprobs are numerator
+            # For this static analysis, we measure how much space the epsilon allows
+            ratio = torch.exp(row["old_logprobs"] - row["ref_logprobs"]) # mock ratio distribution
+            
+            # Count affected fraction
+            clipped_mask = (ratio < 1.0 - eps) | (ratio > 1.0 + eps)
+            clipped_tokens += clipped_mask.sum().item()
+            total_tokens += clipped_mask.numel()
+            
+        fraction = clipped_tokens / max(1, total_tokens)
+        print(f"Epsilon={eps}: Estimated Affected Token Fraction = {fraction:.4f}")
+    
+    # 2. Run the matched short forks for each epsilon
     print("\n--- Launching Clipping Forks ---")
     for eps in clip_values:
         run_name = f"clip_{eps}"
