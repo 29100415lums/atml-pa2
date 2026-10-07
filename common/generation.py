@@ -44,9 +44,12 @@ def batch_generate(
     was_training = model.training
     model.eval()
     
-    # HF generate() with use_cache=True conflicts with gradient checkpointing
+    # Safely disable gradient checkpointing and toggle use_cache on the base model config
     if hasattr(model, "gradient_checkpointing_disable"):
         model.gradient_checkpointing_disable()
+        
+    old_use_cache = getattr(model.config, "use_cache", True)
+    model.config.use_cache = True
         
     kwargs = {
         "max_new_tokens": max_new_tokens,
@@ -60,6 +63,8 @@ def batch_generate(
 
     with torch.inference_mode():
         seq = model.generate(**enc, **kwargs)
+        
+    model.config.use_cache = old_use_cache
         
     if was_training:
         model.train()
