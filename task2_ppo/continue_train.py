@@ -129,11 +129,11 @@ def run_ppo(config_path: str, output: str | None = None, updates: int | None = N
             max_prompt_length=max_p_len, max_new_tokens=max_r_len
         )
         
-        sequences = gen["sequences"]
-        attention_mask = gen["attention_mask"]
+        sequences = gen["sequences"].clone()
+        attention_mask = gen["attention_mask"].clone()
         p_width = gen["prompt_width"]
-        r_ids = gen["response_ids"]
-        r_mask = gen["response_mask"]
+        r_ids = gen["response_ids"].clone()
+        r_mask = gen["response_mask"].clone()
         responses = gen["responses"]
         lengths = gen["response_lengths"]
 
