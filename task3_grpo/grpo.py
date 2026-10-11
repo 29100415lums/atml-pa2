@@ -2,19 +2,38 @@ from __future__ import annotations
 
 import torch
 
-from common.metrics import masked_mean, sampled_kl, sample_entropy
+from common.metrics import masked_mean, sample_entropy
 
 
-def group_relative_advantages(rewards: torch.Tensor, group_ids: torch.Tensor, eps: float = 1e-6):
+def group_relative_advantages(rewards: torch.Tensor, group_ids: torch.Tensor, eps: float = 1e-6) -> torch.Tensor:
     """Return one scalar advantage per sampled completion.
 
     `group_ids[i]` identifies which prompt produced reward `rewards[i]`.
-    Validate this implementation against the group-relative definition in the assignment manual.
+    Advantages are normalized strictly within each prompt's group of sampled completions.
     """
-    # Starter implementation: students must validate the grouping logic carefully.
-    mean = rewards.mean()
-    std = rewards.std(unbiased=False).clamp_min(eps)
-    return (rewards - mean) / std
+    advantages = torch.zeros_like(rewards)
+    unique_groups = torch.unique(group_ids)
+    
+    for g in unique_groups:
+        mask = (group_ids == g)
+        r_group = rewards[mask]
+        
+        if r_group.numel() <= 1:
+            advantages[mask] = 0.0
+            continue
+            
+        r_min = r_group.min()
+        r_max = r_group.max()
+        
+        # If all completions in this group received identical rewards, advantage is zero
+        if (r_max - r_min).abs() < 1e-7:
+            advantages[mask] = 0.0
+        else:
+            mean = r_group.mean()
+            std = r_group.std(unbiased=False).clamp_min(eps)
+            advantages[mask] = (r_group - mean) / std
+            
+    return advantages
 
 
 def grpo_policy_loss(
@@ -33,7 +52,9 @@ def grpo_policy_loss(
     `token_mask` may be all-zero for a completion that was deliberately masked because it hit the
     maximum generation length.
     """
-    ratio = torch.exp(new_logp - old_logp)
+    # Clamp log-ratio to avoid numerical instability
+    log_ratio = (new_logp - old_logp).clamp(-10.0, 10.0)
+    ratio = torch.exp(log_ratio)
     adv = seq_adv[:, None]
     s1 = ratio * adv
     s2 = ratio.clamp(1.0 - eps, 1.0 + eps) * adv
@@ -53,7 +74,7 @@ def grpo_policy_loss(
     else:
         raise ValueError(f"Unknown loss_type={loss_type!r}")
 
-    log_ratio_ref_over_policy = ref_logp - new_logp
+    log_ratio_ref_over_policy = (ref_logp - new_logp).clamp(-10.0, 10.0)
     per_token_kl = torch.exp(log_ratio_ref_over_policy) - log_ratio_ref_over_policy - 1.0
     kl = masked_mean(per_token_kl, token_mask)
     loss = policy_term + float(beta) * kl
