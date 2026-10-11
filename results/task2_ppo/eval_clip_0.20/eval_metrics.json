@@ -1,0 +1,8 @@
+{
+  "adapter": "outputs/task2_ppo/clip_0.2",
+  "mean_kl": 4.313983889005612e-05,
+  "mean_entropy": 0.8302369976043701,
+  "mean_reward": 1.4128694725036621,
+  "mean_length": 299.01,
+  "std_length": 245.65921497065807
+}

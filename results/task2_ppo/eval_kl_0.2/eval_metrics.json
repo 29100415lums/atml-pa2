@@ -1,0 +1,8 @@
+{
+  "adapter": "outputs/task2_ppo/kl_beta_0.2",
+  "mean_kl": 0.00019092851853201863,
+  "mean_entropy": 0.8324910181760788,
+  "mean_reward": 1.3083256530761718,
+  "mean_length": 295.815,
+  "std_length": 255.5214683250705
+}

@@ -1,0 +1,8 @@
+{
+  "adapter": "outputs/task2_ppo/standard",
+  "mean_kl": 0.00036622425429413854,
+  "mean_entropy": 0.8545575892925262,
+  "mean_reward": 1.3484675216674804,
+  "mean_length": 291.185,
+  "std_length": 256.41374919258914
+}
