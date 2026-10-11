@@ -1,0 +1,9 @@
+{
+  "adapter": "outputs/task3_grpo/standard",
+  "mean_reward": 1.111664400100708,
+  "std_reward": 1.6890779610203794,
+  "mean_kl": -0.0035884695887216365,
+  "mean_entropy": 0.9972021298855543,
+  "mean_length": 265.785,
+  "std_length": 195.11429669555227
+}
