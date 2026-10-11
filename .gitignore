@@ -11,8 +11,8 @@ hf_cache/
 .huggingface/
 wandb/
 
-# Student outputs
-outputs/
+# Student outputs (allowed so checkpoints can be synced across spot instances)
+# outputs/
 
 # Downloaded course assets
 cached/*
