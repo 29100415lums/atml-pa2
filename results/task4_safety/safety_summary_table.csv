@@ -1,0 +1,5 @@
+Policy,Safe Answer Rate (%),Safe Over-Refusal (%),Unsafe Compliance (%),Justified Refusal (%),Ambiguous Rate (%),Mean Length (Tokens)
+SFT,55.60%,0.00%,0.00%,85.00%,0.00%,105.7 ± 78.5
+DPO,54.80%,0.00%,0.00%,88.50%,0.00%,107.1 ± 80.9
+PPO,58.00%,0.00%,0.00%,88.00%,0.00%,105.5 ± 78.4
+GRPO,57.20%,0.00%,0.00%,86.50%,0.00%,106.2 ± 79.0
