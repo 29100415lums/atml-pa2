@@ -26,13 +26,19 @@ def dataset_path(cfg, dataset: str):
     if dataset == "gsm":
         return cfg["paths"]["gsm_eval"]
     if dataset == "transfer":
-        return cfg["paths"]["math_transfer_eval"]
+        p = repo_path(cfg["paths"]["math_transfer_eval"])
+        if not p.exists():
+            from scripts.prepare_transfer_eval import materialize_transfer_eval
+            print(f"Materializing transfer eval dataset to {p}...")
+            materialize_transfer_eval(output_path=p)
+        return p
     raise ValueError(f"Unknown dataset: {dataset}")
 
 
 def load_math_evaluation(config_path: str, dataset: str):
     cfg = load_yaml(config_path)
-    rows = read_jsonl(dataset_path(cfg, dataset))
+    dpath = dataset_path(cfg, dataset)
+    rows = read_jsonl(dpath)
     tokenizer = load_tokenizer(cfg["base_model"])
     return cfg, rows, tokenizer
 
