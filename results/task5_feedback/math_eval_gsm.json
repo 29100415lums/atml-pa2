@@ -1,0 +1,54 @@
+{
+  "dataset": "gsm",
+  "n_problems": 300,
+  "policies": {
+    "sft": {
+      "exact_accuracy": 0.2866666666666667,
+      "format_compliance": 0.37666666666666665,
+      "mean_length": 281.30333333333334,
+      "std_length": 87.89981791157982
+    },
+    "rlvr": {
+      "exact_accuracy": 0.2833333333333333,
+      "format_compliance": 0.3433333333333333,
+      "mean_length": 279.91,
+      "std_length": 84.88224333353433
+    },
+    "rlaif": {
+      "exact_accuracy": 0.30666666666666664,
+      "format_compliance": 0.37,
+      "mean_length": 280.91333333333336,
+      "std_length": 88.25840369178576
+    }
+  },
+  "pairwise_rlvr_vs_sft": {
+    "win_rate_rlvr_vs_sft": 0.5,
+    "win_rate_sft_vs_rlvr": 0.5,
+    "wins_a": 12,
+    "wins_b": 12,
+    "ties": 276,
+    "tie_rate": 0.92,
+    "decisive_verifier_pairs": 43,
+    "verifier_judge_agreement_rate": 0.16279069767441862
+  },
+  "pairwise_rlaif_vs_sft": {
+    "win_rate_rlaif_vs_sft": 0.5,
+    "win_rate_sft_vs_rlaif": 0.5,
+    "wins_a": 15,
+    "wins_b": 15,
+    "ties": 270,
+    "tie_rate": 0.9,
+    "decisive_verifier_pairs": 40,
+    "verifier_judge_agreement_rate": 0.125
+  },
+  "pairwise_rlvr_vs_rlaif": {
+    "win_rate_rlvr_vs_rlaif": 0.49333333333333335,
+    "win_rate_rlaif_vs_rlvr": 0.5066666666666667,
+    "wins_a": 9,
+    "wins_b": 13,
+    "ties": 278,
+    "tie_rate": 0.9266666666666666,
+    "decisive_verifier_pairs": 37,
+    "verifier_judge_agreement_rate": 0.16216216216216217
+  }
+}

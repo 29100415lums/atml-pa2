@@ -1,0 +1,227 @@
+{
+  "master_table": [
+    {
+      "Policy": "SFT",
+      "GSM8K Acc (%)": "28.67%",
+      "SVAMP Transfer Acc (%)": "40.00%",
+      "Transfer Drop (pp)": "+11.33",
+      "GSM8K Win Rate vs SFT (%)": "50.00%",
+      "SVAMP Win Rate vs SFT (%)": "50.00%",
+      "Format Compliance (%)": "37.7%",
+      "Mean Length": "281.3"
+    },
+    {
+      "Policy": "RLVR",
+      "GSM8K Acc (%)": "28.33%",
+      "SVAMP Transfer Acc (%)": "45.00%",
+      "Transfer Drop (pp)": "+16.67",
+      "GSM8K Win Rate vs SFT (%)": "50.00%",
+      "SVAMP Win Rate vs SFT (%)": "49.50%",
+      "Format Compliance (%)": "34.3%",
+      "Mean Length": "279.9"
+    },
+    {
+      "Policy": "RLAIF",
+      "GSM8K Acc (%)": "30.67%",
+      "SVAMP Transfer Acc (%)": "43.00%",
+      "Transfer Drop (pp)": "+12.33",
+      "GSM8K Win Rate vs SFT (%)": "50.00%",
+      "SVAMP Win Rate vs SFT (%)": "50.50%",
+      "Format Compliance (%)": "37.0%",
+      "Mean Length": "280.9"
+    }
+  ],
+  "gsm_eval": {
+    "dataset": "gsm",
+    "n_problems": 300,
+    "policies": {
+      "sft": {
+        "exact_accuracy": 0.2866666666666667,
+        "format_compliance": 0.37666666666666665,
+        "mean_length": 281.30333333333334,
+        "std_length": 87.89981791157982
+      },
+      "rlvr": {
+        "exact_accuracy": 0.2833333333333333,
+        "format_compliance": 0.3433333333333333,
+        "mean_length": 279.91,
+        "std_length": 84.88224333353433
+      },
+      "rlaif": {
+        "exact_accuracy": 0.30666666666666664,
+        "format_compliance": 0.37,
+        "mean_length": 280.91333333333336,
+        "std_length": 88.25840369178576
+      }
+    },
+    "pairwise_rlvr_vs_sft": {
+      "win_rate_rlvr_vs_sft": 0.5,
+      "win_rate_sft_vs_rlvr": 0.5,
+      "wins_a": 12,
+      "wins_b": 12,
+      "ties": 276,
+      "tie_rate": 0.92,
+      "decisive_verifier_pairs": 43,
+      "verifier_judge_agreement_rate": 0.16279069767441862
+    },
+    "pairwise_rlaif_vs_sft": {
+      "win_rate_rlaif_vs_sft": 0.5,
+      "win_rate_sft_vs_rlaif": 0.5,
+      "wins_a": 15,
+      "wins_b": 15,
+      "ties": 270,
+      "tie_rate": 0.9,
+      "decisive_verifier_pairs": 40,
+      "verifier_judge_agreement_rate": 0.125
+    },
+    "pairwise_rlvr_vs_rlaif": {
+      "win_rate_rlvr_vs_rlaif": 0.49333333333333335,
+      "win_rate_rlaif_vs_rlvr": 0.5066666666666667,
+      "wins_a": 9,
+      "wins_b": 13,
+      "ties": 278,
+      "tie_rate": 0.9266666666666666,
+      "decisive_verifier_pairs": 37,
+      "verifier_judge_agreement_rate": 0.16216216216216217
+    }
+  },
+  "transfer_eval": {
+    "dataset": "transfer",
+    "n_problems": 100,
+    "policies": {
+      "sft": {
+        "exact_accuracy": 0.4,
+        "format_compliance": 0.49,
+        "mean_length": 163.6,
+        "std_length": 68.83690870456051
+      },
+      "rlvr": {
+        "exact_accuracy": 0.45,
+        "format_compliance": 0.58,
+        "mean_length": 163.77,
+        "std_length": 77.966256162522
+      },
+      "rlaif": {
+        "exact_accuracy": 0.43,
+        "format_compliance": 0.53,
+        "mean_length": 164.45,
+        "std_length": 75.05363082489747
+      }
+    },
+    "pairwise_rlvr_vs_sft": {
+      "win_rate_rlvr_vs_sft": 0.495,
+      "win_rate_sft_vs_rlvr": 0.505,
+      "wins_a": 12,
+      "wins_b": 13,
+      "ties": 75,
+      "tie_rate": 0.75,
+      "decisive_verifier_pairs": 11,
+      "verifier_judge_agreement_rate": 0.18181818181818182
+    },
+    "pairwise_rlaif_vs_sft": {
+      "win_rate_rlaif_vs_sft": 0.505,
+      "win_rate_sft_vs_rlaif": 0.495,
+      "wins_a": 13,
+      "wins_b": 12,
+      "ties": 75,
+      "tie_rate": 0.75,
+      "decisive_verifier_pairs": 13,
+      "verifier_judge_agreement_rate": 0.15384615384615385
+    },
+    "pairwise_rlvr_vs_rlaif": {
+      "win_rate_rlvr_vs_rlaif": 0.5,
+      "win_rate_rlaif_vs_rlvr": 0.5,
+      "wins_a": 11,
+      "wins_b": 11,
+      "ties": 78,
+      "tie_rate": 0.78,
+      "decisive_verifier_pairs": 10,
+      "verifier_judge_agreement_rate": 0.2
+    }
+  },
+  "diagnostics": {
+    "n_problems": 20,
+    "reasoning_sensitivity": {
+      "description": "S_reason: clean_correct vs corrupt_reasoning_correct_final",
+      "rates": {
+        "rlvr": {
+          "better_rate": 0.0,
+          "tie_rate": 1.0,
+          "wrong_preference_rate": 0.0
+        },
+        "rlaif": {
+          "better_rate": 0.0,
+          "tie_rate": 0.95,
+          "wrong_preference_rate": 0.05
+        }
+      },
+      "S_reason_rlvr": 0.0,
+      "S_reason_rlaif": 0.0
+    },
+    "outcome_sensitivity": {
+      "description": "S_outcome: clean_correct vs good_reasoning_wrong_final",
+      "rates": {
+        "rlvr": {
+          "better_rate": 1.0,
+          "tie_rate": 0.0,
+          "wrong_preference_rate": 0.0
+        },
+        "rlaif": {
+          "better_rate": 0.05,
+          "tie_rate": 0.95,
+          "wrong_preference_rate": 0.0
+        }
+      },
+      "S_outcome_rlvr": 1.0,
+      "S_outcome_rlaif": 0.05
+    },
+    "filler_susceptibility": {
+      "description": "clean_correct vs persuasive_filler_correct",
+      "rates": {
+        "rlvr": {
+          "better_rate": 0.0,
+          "tie_rate": 1.0,
+          "wrong_preference_rate": 0.0
+        },
+        "rlaif": {
+          "better_rate": 0.0,
+          "tie_rate": 0.75,
+          "wrong_preference_rate": 0.25
+        }
+      },
+      "filler_preference_rlaif": 0.25,
+      "filler_preference_rlvr": 0.0
+    },
+    "distractor_robustness": {
+      "description": "good_reasoning_wrong_final vs gold_distractor_wrong_final",
+      "rates": {
+        "rlvr": {
+          "better_rate": 0.0,
+          "tie_rate": 1.0,
+          "wrong_preference_rate": 0.0
+        },
+        "rlaif": {
+          "better_rate": 0.0,
+          "tie_rate": 1.0,
+          "wrong_preference_rate": 0.0
+        }
+      },
+      "distractor_preference_rlaif": 0.0,
+      "distractor_preference_rlvr": 0.0
+    }
+  },
+  "feedback_properties": {
+    "RLVR": {
+      "coverage": "Sparse outcome-only (binary 0 or 1 on final answer)",
+      "noise": "Zero noise (exact parser against ground truth)",
+      "exploitability": "Vulnerable to reward hacking with gold distractor or brute-forcing; blind to faulty reasoning",
+      "inference_cost": "Negligible (regex pattern matching, < 1ms)"
+    },
+    "RLAIF": {
+      "coverage": "Dense and comparative (evaluates reasoning steps, tone, structure)",
+      "noise": "Moderate judge variance / stochasticity; subject to positional and length biases",
+      "exploitability": "Vulnerable to persuasive filler and verbose confidence hacking",
+      "inference_cost": "High (calls 3B LLM autoregressively for every pair)"
+    }
+  }
+}

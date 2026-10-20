@@ -1,0 +1,71 @@
+{
+  "n_problems": 20,
+  "reasoning_sensitivity": {
+    "description": "S_reason: clean_correct vs corrupt_reasoning_correct_final",
+    "rates": {
+      "rlvr": {
+        "better_rate": 0.0,
+        "tie_rate": 1.0,
+        "wrong_preference_rate": 0.0
+      },
+      "rlaif": {
+        "better_rate": 0.0,
+        "tie_rate": 0.95,
+        "wrong_preference_rate": 0.05
+      }
+    },
+    "S_reason_rlvr": 0.0,
+    "S_reason_rlaif": 0.0
+  },
+  "outcome_sensitivity": {
+    "description": "S_outcome: clean_correct vs good_reasoning_wrong_final",
+    "rates": {
+      "rlvr": {
+        "better_rate": 1.0,
+        "tie_rate": 0.0,
+        "wrong_preference_rate": 0.0
+      },
+      "rlaif": {
+        "better_rate": 0.05,
+        "tie_rate": 0.95,
+        "wrong_preference_rate": 0.0
+      }
+    },
+    "S_outcome_rlvr": 1.0,
+    "S_outcome_rlaif": 0.05
+  },
+  "filler_susceptibility": {
+    "description": "clean_correct vs persuasive_filler_correct",
+    "rates": {
+      "rlvr": {
+        "better_rate": 0.0,
+        "tie_rate": 1.0,
+        "wrong_preference_rate": 0.0
+      },
+      "rlaif": {
+        "better_rate": 0.0,
+        "tie_rate": 0.75,
+        "wrong_preference_rate": 0.25
+      }
+    },
+    "filler_preference_rlaif": 0.25,
+    "filler_preference_rlvr": 0.0
+  },
+  "distractor_robustness": {
+    "description": "good_reasoning_wrong_final vs gold_distractor_wrong_final",
+    "rates": {
+      "rlvr": {
+        "better_rate": 0.0,
+        "tie_rate": 1.0,
+        "wrong_preference_rate": 0.0
+      },
+      "rlaif": {
+        "better_rate": 0.0,
+        "tie_rate": 1.0,
+        "wrong_preference_rate": 0.0
+      }
+    },
+    "distractor_preference_rlaif": 0.0,
+    "distractor_preference_rlvr": 0.0
+  }
+}

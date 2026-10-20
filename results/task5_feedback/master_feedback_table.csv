@@ -1,0 +1,4 @@
+Policy,GSM8K Acc (%),SVAMP Transfer Acc (%),Transfer Drop (pp),GSM8K Win Rate vs SFT (%),SVAMP Win Rate vs SFT (%),Format Compliance (%),Mean Length
+SFT,28.67%,40.00%,+11.33,50.00%,50.00%,37.7%,281.3
+RLVR,28.33%,45.00%,+16.67,50.00%,49.50%,34.3%,279.9
+RLAIF,30.67%,43.00%,+12.33,50.00%,50.50%,37.0%,280.9

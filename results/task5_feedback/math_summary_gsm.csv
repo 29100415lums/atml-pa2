@@ -1,0 +1,4 @@
+Policy,Exact Accuracy (%),Format Compliance (%),Mean Length (Tokens),Pairwise Win Rate vs SFT (%)
+SFT,28.67%,37.67%,281.3 ± 87.9,Baseline (50.0%)
+RLVR,28.33%,34.33%,279.9 ± 84.9,50.00%
+RLAIF,30.67%,37.00%,280.9 ± 88.3,50.00%
