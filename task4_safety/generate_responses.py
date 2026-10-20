@@ -57,15 +57,30 @@ def generate_for_policy(cfg, policy_name: str, batch_size: int = 4):
 
 
 def main():
-    ap = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser(description="Generate deterministic safety responses on XSTest")
     ap.add_argument("--config", default="configs/feedback.yaml")
+    ap.add_argument("--policy", default="all", choices=["all", "sft", "dpo", "ppo", "grpo"],
+                    help="Policy to evaluate or 'all' for all four standard policies")
+    ap.add_argument("--batch-size", type=int, default=4)
     args = ap.parse_args()
+
     cfg = load_yaml(args.config)
-    print("Policies:", list(policy_specs(cfg)))
-    print("XSTest rows:", len(load_xstest(cfg)))
-    raise NotImplementedError(
-        "TODO(student): call generate_for_policy for SFT/DPO/PPO/GRPO, save common deterministic responses, and preserve the fixed prompt order."
-    )
+    specs = policy_specs(cfg)
+    out_dir = repo_path(cfg.get("results_dir", "results")) / "task4_safety"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    policies_to_run = list(specs.keys()) if args.policy == "all" else [args.policy]
+    print(f"Generating XSTest responses for policies: {policies_to_run}")
+
+    for pol in policies_to_run:
+        out_file = out_dir / f"generated_{pol}.jsonl"
+        print(f"\n>>> Running generation for policy: {pol.upper()} -> {out_file}")
+        records = generate_for_policy(cfg, pol, batch_size=args.batch_size)
+        from common.data import write_jsonl
+        write_jsonl(out_file, records)
+        print(f"Saved {len(records)} responses for {pol.upper()} to {out_file}")
+
+    print("\nXSTest response generation completed for all requested policies.")
 
 
 if __name__ == "__main__":

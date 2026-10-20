@@ -102,20 +102,71 @@ def judge_one(tok, model, prompt, response, max_new_tokens=64):
     return parse_json(generated)
 
 
+def judge_records(tok, model, records: list[dict], out_path: Path, max_new_tokens: int = 64):
+    existing = {}
+    if out_path.exists():
+        for r in read_jsonl(out_path):
+            existing[int(r["xstest_id"])] = r
+
+    judged = []
+    from tqdm import tqdm
+    for row in tqdm(records, desc=f"Judging {out_path.stem}"):
+        xid = int(row["xstest_id"])
+        if xid in existing and "judge_label" in existing[xid]:
+            judged.append(existing[xid])
+            continue
+
+        result = judge_one(
+            tok, model,
+            prompt=row["prompt"],
+            response=row["response"],
+            max_new_tokens=max_new_tokens,
+        )
+        row_copy = dict(row)
+        row_copy["judge_label"] = result["label"]
+        row_copy["judge_confidence"] = result["confidence"]
+        row_copy["judge_rationale"] = result["rationale_tag"]
+        judged.append(row_copy)
+
+    from common.data import write_jsonl
+    write_jsonl(out_path, judged)
+    print(f"Saved {len(judged)} judged rows to {out_path}")
+    return judged
+
+
 def main():
-    ap = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser(description="Categorical AI behavior judging on XSTest responses")
     ap.add_argument("--config", default="configs/feedback.yaml")
-    ap.add_argument("--input", help="Optional generated JSONL file to inspect")
+    ap.add_argument("--policy", default="all", choices=["all", "sft", "dpo", "ppo", "grpo"])
+    ap.add_argument("--input", help="Optional specific generated JSONL file to judge")
     args = ap.parse_args()
+
     cfg = load_yaml(args.config)
     tok, model = load_judge(cfg)
-    print("Fixed Task 4 judge loaded:", cfg["ai_judge_model"])
+    print("Fixed Task 4 AI Judge loaded successfully:", cfg["ai_judge_model"])
+
+    out_dir = repo_path(cfg.get("results_dir", "results")) / "task4_safety"
+    max_new_tokens = int(cfg.get("judge_max_new_tokens", 64))
+
     if args.input:
-        rows = read_jsonl(args.input)
-        print("Input rows:", len(rows))
-    raise NotImplementedError(
-        "TODO(student): apply judge_one to your frozen-policy response files, cache the labels, and implement the required Task 4 aggregation."
-    )
+        in_path = repo_path(args.input)
+        rows = read_jsonl(in_path)
+        out_path = out_dir / f"judged_{in_path.stem}.jsonl"
+        judge_records(tok, model, rows, out_path, max_new_tokens)
+        return
+
+    policies = ["sft", "dpo", "ppo", "grpo"] if args.policy == "all" else [args.policy]
+    for pol in policies:
+        gen_file = out_dir / f"generated_{pol}.jsonl"
+        if not gen_file.exists():
+            print(f"Warning: {gen_file} does not exist yet. Please run generate_responses.py first.")
+            continue
+        rows = read_jsonl(gen_file)
+        judged_file = out_dir / f"judged_{pol}.jsonl"
+        print(f"\n>>> Judging {len(rows)} responses for {pol.upper()} -> {judged_file}")
+        judge_records(tok, model, rows, judged_file, max_new_tokens)
+
+    print("\nCategorical AI judging completed.")
 
 
 if __name__ == "__main__":
